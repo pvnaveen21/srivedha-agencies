@@ -1,0 +1,395 @@
+/* ===== CSS DESIGN SYSTEM - Srivedha Agencies ===== */
+
+:root {
+  /* Primary Colors - Deep Navy & Vibrant Teal */
+  --primary-900: #0a1628;
+  --primary-800: #0f2240;
+  --primary-700: #142e58;
+  --primary-600: #1a3a6e;
+  --primary-500: #1e4d8f;
+  --primary-400: #2a6cb8;
+  --primary-300: #4a8fd4;
+  --primary-200: #7ab4e8;
+  --primary-100: #b3d7f5;
+  --primary-50: #e6f2fc;
+
+  /* Accent - Vibrant Orange/Amber */
+  --accent-600: #c2410c;
+  --accent-500: #ea580c;
+  --accent-400: #f97316;
+  --accent-300: #fb923c;
+  --accent-200: #fdba74;
+  --accent-100: #fed7aa;
+  --accent-50: #fff7ed;
+
+  /* Success */
+  --success-500: #10b981;
+  --success-400: #34d399;
+  --success-100: #d1fae5;
+
+  /* Neutral */
+  --neutral-950: #0a0a0a;
+  --neutral-900: #171717;
+  --neutral-800: #262626;
+  --neutral-700: #404040;
+  --neutral-600: #525252;
+  --neutral-500: #737373;
+  --neutral-400: #a3a3a3;
+  --neutral-300: #d4d4d4;
+  --neutral-200: #e5e5e5;
+  --neutral-100: #f5f5f5;
+  --neutral-50: #fafafa;
+
+  /* Semantic */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-dark: var(--primary-900);
+  --text-primary: var(--neutral-900);
+  --text-secondary: var(--neutral-600);
+  --text-muted: var(--neutral-500);
+  --text-inverse: #ffffff;
+  --border-color: var(--neutral-200);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-500) 50%, #1a6f8f 100%);
+  --gradient-accent: linear-gradient(135deg, var(--accent-500) 0%, var(--accent-400) 100%);
+  --gradient-hero: linear-gradient(135deg, #0a1628 0%, #142e58 40%, #1a4a6e 70%, #1a6f5f 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  --gradient-card: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.02) 100%);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0,0,0,0.15);
+  --shadow-glow: 0 0 40px rgba(30, 77, 143, 0.15);
+  --shadow-accent-glow: 0 0 30px rgba(249, 115, 22, 0.2);
+
+  /* Typography */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Spacing */
+  --section-padding: 100px 0;
+  --container-max: 1280px;
+  --container-padding: 0 24px;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ===== RESET ===== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition-base);
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+  outline: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* ===== UTILITY CLASSES ===== */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--container-padding);
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-500);
+  margin-bottom: 16px;
+}
+
+.section-label::before {
+  content: '';
+  display: inline-block;
+  width: 30px;
+  height: 2px;
+  background: var(--accent-500);
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  line-height: 1.7;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 32px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  transition: var(--transition-base);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+  opacity: 0;
+  transition: var(--transition-base);
+}
+
+.btn:hover::after {
+  opacity: 1;
+}
+
+.btn-primary {
+  background: var(--gradient-accent);
+  color: white;
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary-600);
+  border: 2px solid var(--primary-300);
+}
+
+.btn-outline:hover {
+  background: var(--primary-50);
+  border-color: var(--primary-500);
+  transform: translateY(-2px);
+}
+
+.btn-dark {
+  background: var(--primary-800);
+  color: white;
+}
+
+.btn-dark:hover {
+  background: var(--primary-700);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(249, 115, 22, 0.4); }
+}
+
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered animations */
+.stagger-1 { transition-delay: 0.1s; }
+.stagger-2 { transition-delay: 0.2s; }
+.stagger-3 { transition-delay: 0.3s; }
+.stagger-4 { transition-delay: 0.4s; }
+.stagger-5 { transition-delay: 0.5s; }
+.stagger-6 { transition-delay: 0.6s; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  :root {
+    --section-padding: 80px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --section-padding: 60px 0;
+    --container-padding: 0 16px;
+  }
+  .section-title {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+  }
+  .btn {
+    padding: 12px 24px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --section-padding: 48px 0;
+  }
+}
