@@ -19,14 +19,14 @@ export default function Footer() {
                         {/* Brand */}
                         <div className="footer__brand">
                             <Link to="/" className="footer__logo">
-                                <img src="/logo.png" alt="Srivedha Agencies" className="footer__logo-img" />
+                                <img src="/logo.png" alt="Sri Vedha Agencies" className="navbar__logo-img" />
                                 <div>
-                                    <span className="footer__logo-name">Srivedha</span>
+                                    <span className="footer__logo-name">Sri Vedha</span>
                                     <span className="footer__logo-sub">Agencies</span>
                                 </div>
                             </Link>
                             <p className="footer__description">
-                                Your trusted B2B wholesale partner for quality products at competitive bulk prices. Empowering retailers across India.
+                                India's most trusted brand-authorized marketplace platform. We empower brands with complete control over their online distribution and brand protection.
                             </p>
                             <div className="footer__socials">
                                 <a href="#" className="footer__social" aria-label="Facebook"><Facebook size={18} /></a>
@@ -42,9 +42,9 @@ export default function Footer() {
                             <ul className="footer__links">
                                 <li><Link to="/">Home</Link></li>
                                 <li><Link to="/about">About Us</Link></li>
+                                <li><Link to="/services">Services</Link></li>
                                 <li><Link to="/categories">Categories</Link></li>
                                 <li><Link to="/contact">Contact Us</Link></li>
-                                <li><Link to="/faq">FAQ</Link></li>
                             </ul>
                         </div>
 
@@ -52,11 +52,7 @@ export default function Footer() {
                         <div className="footer__column">
                             <h4 className="footer__column-title">Categories</h4>
                             <ul className="footer__links">
-                                <li><Link to="/categories/fmcg">FMCG Products</Link></li>
                                 <li><Link to="/categories/personal-care">Personal Care</Link></li>
-                                <li><Link to="/categories/household">Household Items</Link></li>
-                                <li><Link to="/categories/groceries">Groceries</Link></li>
-                                <li><Link to="/categories/beverages">Beverages</Link></li>
                             </ul>
                         </div>
 
@@ -67,7 +63,6 @@ export default function Footer() {
                                 <li><Link to="/faq">Help Center</Link></li>
                                 <li><Link to="/privacy">Privacy Policy</Link></li>
                                 <li><Link to="/terms">Terms & Conditions</Link></li>
-                                <li><Link to="/login">Login / Register</Link></li>
                             </ul>
                         </div>
 
@@ -77,15 +72,15 @@ export default function Footer() {
                             <ul className="footer__contact-list">
                                 <li>
                                     <MapPin size={16} />
-                                    <span>123 Business Park, Chennai, Tamil Nadu, India</span>
+                                    <span>Registered Office: Chennai, Tamil Nadu, India</span>
                                 </li>
                                 <li>
                                     <Phone size={16} />
-                                    <span>+91 98765 43210</span>
+                                    <span>Contact our team for inquiries</span>
                                 </li>
                                 <li>
                                     <Mail size={16} />
-                                    <span>info@srivedhaagencies.com</span>
+                                    <span>official@srivedhaagencies.com</span>
                                 </li>
                             </ul>
                         </div>
@@ -95,7 +90,7 @@ export default function Footer() {
 
             <div className="footer__bottom">
                 <div className="container footer__bottom-content">
-                    <p>&copy; {new Date().getFullYear()} Srivedha Agencies. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} Sri Vedha Agencies. All rights reserved.</p>
                     <div className="footer__bottom-links">
                         <Link to="/privacy">Privacy</Link>
                         <Link to="/terms">Terms</Link>

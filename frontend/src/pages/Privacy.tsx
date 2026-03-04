@@ -14,7 +14,7 @@ export default function Privacy() {
                 <div className="container legal-content__wrapper">
                     <div className="legal-section">
                         <h2>1. Information We Collect</h2>
-                        <p>We collect information you provide when registering an account, placing orders, or contacting us. This includes your name, email address, phone number, business details, shipping address, and payment information.</p>
+                        <p>We collect information you provide when registering an account, requesting demos, or contacting us. This includes your name, email address, phone number, business details, and official communication address.</p>
                     </div>
                     <div className="legal-section">
                         <h2>2. How We Use Your Information</h2>
@@ -38,7 +38,7 @@ export default function Privacy() {
                     </div>
                     <div className="legal-section">
                         <h2>7. Contact Us</h2>
-                        <p>If you have questions about this Privacy Policy, please contact us at privacy@srivedhaagencies.com or call +91 98765 43210.</p>
+                        <p>If you have questions about this Privacy Policy, please contact us at official@srivedhaagencies.com.</p>
                     </div>
                 </div>
             </section>
