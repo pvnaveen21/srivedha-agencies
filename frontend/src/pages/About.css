@@ -1,133 +1,273 @@
 /* ===== ABOUT PAGE ===== */
 
-/* Hero */
-.about-hero {
-    position: relative;
-    padding: 160px 0 80px;
-    background: var(--gradient-hero);
-    text-align: center;
+/* ===== Hero Mosaic ===== */
+.about-hero-mosaic {
+    padding-top: 80px;
     overflow: hidden;
+    position: relative;
 }
 
-.about-hero__bg {
+.about-hero-mosaic__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 240px 240px;
+    gap: 4px;
+    min-height: 480px;
+}
+
+.about-hero-mosaic__tile {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    overflow: hidden;
+    cursor: default;
+}
+
+/* Each tile shows a different quadrant with its own image */
+.about-hero-mosaic__tile-img {
     position: absolute;
     inset: 0;
-    background-image:
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s cubic-bezier(0.2, 0, 0.2, 1);
 }
 
-.about-hero__content {
+.about-hero-mosaic__tile:hover .about-hero-mosaic__tile-img {
+    transform: scale(1.1);
+}
+
+/* Gradient overlay with brand colors */
+.about-hero-mosaic__tile-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    transition: opacity 0.5s ease;
+}
+
+.about-hero-mosaic__tile--1 .about-hero-mosaic__tile-overlay {
+    background: linear-gradient(135deg, rgba(30, 77, 143, 0.6) 0%, rgba(37, 99, 235, 0.3) 100%);
+}
+
+.about-hero-mosaic__tile--2 .about-hero-mosaic__tile-overlay {
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.6) 0%, rgba(251, 146, 60, 0.3) 100%);
+}
+
+.about-hero-mosaic__tile--3 .about-hero-mosaic__tile-overlay {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.6) 0%, rgba(52, 211, 153, 0.3) 100%);
+}
+
+.about-hero-mosaic__tile--4 .about-hero-mosaic__tile-overlay {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.4) 100%);
+}
+
+.about-hero-mosaic__tile:hover .about-hero-mosaic__tile-overlay {
+    opacity: 0.4;
+}
+
+/* Tile content — icon + label */
+.about-hero-mosaic__tile-content {
     position: relative;
     z-index: 2;
-}
-
-.about-hero__title {
-    font-family: var(--font-heading);
-    font-size: clamp(2.2rem, 4vw, 3.2rem);
-    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 28px;
     color: white;
-    margin-bottom: 20px;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-.about-hero__subtitle {
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.6);
-    max-width: 600px;
-    margin: 0 auto;
-    line-height: 1.7;
+.about-hero-mosaic__tile:hover .about-hero-mosaic__tile-content {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* Mission */
-.about-mission {
+.about-hero-mosaic__tile-content svg {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    flex-shrink: 0;
+}
+
+/* Floating title overlay - absolute center relative to the banner section */
+.about-hero-mosaic__title-overlay {
+    position: absolute;
+    top: calc(50% + 40px);
+    /* Centers relative to the mosaic grid (offsetting the 80px section padding-top) */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border-radius: var(--radius-2xl);
+    padding: 40px 60px;
+    pointer-events: none;
+    width: auto;
+    max-width: 90%;
+    color: white;
+}
+
+.about-hero-mosaic__title-overlay h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.about-hero-mosaic__title-overlay p {
+    font-size: clamp(0.9rem, 1.5vw, 1.25rem);
+    opacity: 0.95;
+    font-weight: 500;
+}
+
+/* ===== Know More / Story ===== */
+.about-story {
     padding: var(--section-padding);
 }
 
-.about-mission__grid {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    gap: 60px;
-    align-items: flex-start;
+.about-story__content {
+    max-width: 800px;
+    margin: 0 auto;
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.about-mission__grid.visible {
+.about-story__content.visible {
     opacity: 1;
     transform: translateY(0);
 }
 
-.about-mission__content p {
+.about-story__text {
+    margin-top: 36px;
+}
+
+.about-story__text p {
     font-size: 1.02rem;
     color: var(--text-secondary);
-    line-height: 1.8;
-    margin-bottom: 16px;
+    line-height: 1.9;
+    margin-bottom: 20px;
+    text-align: justify;
 }
 
-.about-mission__checklist {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 24px;
+/* ===== Mission & Vision ===== */
+.about-mv {
+    padding: var(--section-padding);
+    background: var(--bg-secondary);
 }
 
-.about-mission__check-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-}
-
-.about-mission__check-item svg {
-    color: var(--success-500);
-    flex-shrink: 0;
-}
-
-.about-mission__stats {
+.about-mv__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 32px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.about-mission__stat-card {
-    background: var(--bg-secondary);
+.about-mv__grid.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.about-mv__card {
+    position: relative;
+    background: white;
     border-radius: var(--radius-xl);
-    padding: 28px 24px;
-    text-align: center;
+    padding: 40px 32px;
     border: 1px solid var(--border-color);
+    overflow: hidden;
     transition: var(--transition-base);
 }
 
-.about-mission__stat-card:hover {
+.about-mv__card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
 }
 
-.about-mission__stat-card svg {
-    color: var(--accent-500);
+.about-mv__card-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+}
+
+.about-mv__card-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.about-mv__card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-primary);
     margin-bottom: 12px;
 }
 
-.about-mission__stat-card h3 {
-    font-family: var(--font-heading);
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--primary-700);
-}
-
-.about-mission__stat-card p {
-    font-size: 0.85rem;
+.about-mv__card p {
+    font-size: 0.95rem;
     color: var(--text-secondary);
-    margin-top: 4px;
+    line-height: 1.8;
 }
 
-/* Values */
+/* ===== Stats Row ===== */
+.about-stats-row {
+    padding: 60px 0;
+    background: var(--gradient-hero);
+}
+
+.about-stats-row__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+}
+
+.about-stats-row__item {
+    text-align: center;
+    color: white;
+    padding: 20px;
+}
+
+.about-stats-row__item svg {
+    color: var(--accent-400);
+    margin-bottom: 12px;
+}
+
+.about-stats-row__item h3 {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 4px;
+}
+
+.about-stats-row__item p {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+}
+
+/* ===== Values ===== */
 .about-values {
     padding: var(--section-padding);
-    background: var(--bg-secondary);
 }
 
 .about-values__header {
@@ -175,6 +315,16 @@
     height: 3px;
 }
 
+.about-values__card-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
 .about-values__card h3 {
     font-family: var(--font-heading);
     font-size: 1.1rem;
@@ -188,23 +338,203 @@
     line-height: 1.7;
 }
 
-/* Responsive */
+/* ===== FAQ Section ===== */
+.about-faq {
+    padding: var(--section-padding);
+    background: var(--bg-secondary);
+}
+
+.about-faq .container {
+    max-width: 780px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.about-faq .container.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.about-faq__header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.about-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.about-faq__item {
+    background: white;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition-base);
+}
+
+.about-faq__item:hover {
+    border-color: var(--primary-200);
+}
+
+.about-faq__item--open {
+    border-color: var(--primary-200);
+    box-shadow: var(--shadow-md);
+}
+
+.about-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    padding: 20px 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: var(--transition-base);
+}
+
+.about-faq__question:hover {
+    color: var(--primary-600);
+}
+
+.about-faq__item--open .about-faq__question {
+    color: var(--primary-700);
+}
+
+.about-faq__question svg {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    transition: var(--transition-base);
+}
+
+.about-faq__item--open .about-faq__question svg {
+    color: var(--primary-600);
+}
+
+.about-faq__answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+    padding: 0 24px;
+}
+
+.about-faq__item--open .about-faq__answer {
+    max-height: 300px;
+    padding: 0 24px 24px;
+}
+
+.about-faq__answer p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 1024px) {
-    .about-mission__grid {
+    .about-mv__grid {
         grid-template-columns: 1fr;
     }
 
     .about-values__grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .about-stats-row__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
+    .about-hero-mosaic__grid {
+        grid-template-rows: 180px 180px;
+    }
+
+    .about-hero-mosaic__title-overlay {
+        padding: 24px 32px;
+    }
+
+    .about-hero-mosaic__tile-content {
+        opacity: 0;
+    }
+
+    .about-hero-mosaic__tile:hover .about-hero-mosaic__tile-content {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     .about-values__grid {
         grid-template-columns: 1fr;
     }
 
-    .about-mission__stats {
+    .about-stats-row__grid {
         grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .about-mv__card {
+        padding: 28px 24px;
+    }
+
+    .about-story__text p {
+        text-align: left;
+    }
+
+    .about-faq__question {
+        padding: 16px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-hero-mosaic__grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 140px 140px;
+        min-height: 280px;
+    }
+
+    .about-hero-mosaic__title-overlay {
+        padding: 16px 20px;
+        top: calc(50% + 40px);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+    }
+
+    .about-hero-mosaic__title-overlay h1 {
+        font-size: 1.2rem;
+        margin-bottom: 4px;
+    }
+
+    .about-hero-mosaic__title-overlay p {
+        font-size: 0.8rem;
+    }
+
+    .about-hero-mosaic__tile-content {
+        padding: 12px;
+        gap: 8px;
+        font-size: 0.7rem;
+    }
+
+    .about-hero-mosaic__tile-content svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .about-stats-row__grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .about-stats-row__item h3 {
+        font-size: 1.8rem;
     }
 }

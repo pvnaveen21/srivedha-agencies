@@ -14,11 +14,11 @@ export default function Terms() {
                 <div className="container legal-content__wrapper">
                     <div className="legal-section">
                         <h2>1. Acceptance of Terms</h2>
-                        <p>By accessing and using the Srivedha Agencies platform, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you must not use our services.</p>
+                        <p>By accessing and using the Sri Vedha Agencies platform, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you must not use our services.</p>
                     </div>
                     <div className="legal-section">
                         <h2>2. Account Registration</h2>
-                        <p>To access our wholesale services, you must register for an account with accurate business information. You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account.</p>
+                        <p>To access our brand protection services, you must register for an account with accurate official information. You are responsible for maintaining the confidentiality of your account credentials.</p>
                     </div>
                     <div className="legal-section">
                         <h2>3. Ordering & Pricing</h2>
@@ -38,7 +38,7 @@ export default function Terms() {
                     </div>
                     <div className="legal-section">
                         <h2>7. Limitation of Liability</h2>
-                        <p>Srivedha Agencies shall not be liable for any indirect, incidental, or consequential damages arising from the use of our platform or products. Our total liability shall not exceed the order value in question.</p>
+                        <p>Sri Vedha Agencies shall not be liable for any indirect, incidental, or consequential damages arising from the use of our platform or services.</p>
                     </div>
                     <div className="legal-section">
                         <h2>8. Governing Law</h2>

@@ -1,29 +1,210 @@
 import { Link } from 'react-router-dom';
+import { useState, type FormEvent } from 'react';
 import {
-    ArrowRight, ShoppingCart, Truck, BarChart3, Shield,
-    UserPlus, Search, Package, Clock,
-    ChevronRight, Star, Users, Globe, Award
+    ArrowRight, Shield, ChevronRight, Star, X, CheckCircle, Lock,
+    ShieldCheck, BarChart3, Zap, Eye,
+    TrendingUp, Truck, MapPin, Building2, Handshake
 } from 'lucide-react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import './Home.css';
 
+/* ===== DEMO MODAL ===== */
+interface DemoFormData {
+    fullName: string;
+    email: string;
+    mobile: string;
+    organization: string;
+    comments: string;
+}
+
+function DemoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+    const [formData, setFormData] = useState<DemoFormData>({
+        fullName: '',
+        email: '',
+        mobile: '',
+        organization: '',
+        comments: '',
+    });
+    const [errors, setErrors] = useState<Partial<DemoFormData>>({});
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const validate = (): boolean => {
+        const newErrors: Partial<DemoFormData> = {};
+        if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+            newErrors.email = 'Please enter a valid email address';
+        }
+        if (!formData.mobile.trim()) {
+            newErrors.mobile = 'Mobile number is required';
+        } else if (!/^[0-9]{10}$/.test(formData.mobile.replace(/\s/g, ''))) {
+            newErrors.mobile = 'Please enter a valid 10-digit mobile number';
+        }
+        if (!formData.organization.trim()) newErrors.organization = 'Organization name is required';
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+        if (!validate()) return;
+        setIsSubmitting(true);
+        setTimeout(() => {
+            setIsSubmitting(false);
+            setIsSubmitted(true);
+        }, 1500);
+    };
+
+    const handleChange = (field: keyof DemoFormData, value: string) => {
+        // For mobile field, only allow digits
+        if (field === 'mobile') {
+            value = value.replace(/[^0-9]/g, '').slice(0, 10);
+        }
+        setFormData(prev => ({ ...prev, [field]: value }));
+        if (errors[field]) {
+            setErrors(prev => ({ ...prev, [field]: undefined }));
+        }
+    };
+
+    const handleClose = () => {
+        onClose();
+        setTimeout(() => {
+            setFormData({ fullName: '', email: '', mobile: '', organization: '', comments: '' });
+            setErrors({});
+            setIsSubmitted(false);
+            setIsSubmitting(false);
+        }, 300);
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="demo-modal-overlay" onClick={handleClose}>
+            <div className="demo-modal" onClick={e => e.stopPropagation()}>
+                <button className="demo-modal__close" onClick={handleClose} id="demo-modal-close">
+                    <X size={20} />
+                </button>
+
+                {isSubmitted ? (
+                    <div className="demo-modal__success">
+                        <div className="demo-modal__success-icon">
+                            <CheckCircle size={56} />
+                        </div>
+                        <h3>Thank You!</h3>
+                        <p>Our team will contact you within 24 hours.</p>
+                        <button className="btn btn-primary" onClick={handleClose} id="demo-success-close">
+                            Got It
+                        </button>
+                    </div>
+                ) : (
+                    <>
+                        <div className="demo-modal__header">
+                            <h2>Book Your Demo</h2>
+                            <p>Submit the details below and our team will schedule a demo for you.</p>
+                        </div>
+
+                        <form className="demo-modal__form" onSubmit={handleSubmit} id="demo-form" noValidate>
+                            <div className={`demo-modal__field ${errors.fullName ? 'demo-modal__field--error' : ''}`}>
+                                <label htmlFor="demo-fullName">Full Name <span className="demo-modal__required">*</span></label>
+                                <input
+                                    type="text"
+                                    id="demo-fullName"
+                                    placeholder="Enter your full name"
+                                    value={formData.fullName}
+                                    onChange={e => handleChange('fullName', e.target.value)}
+                                    autoComplete="name"
+                                />
+                                {errors.fullName && <span className="demo-modal__error">{errors.fullName}</span>}
+                            </div>
+
+                            <div className={`demo-modal__field ${errors.email ? 'demo-modal__field--error' : ''}`}>
+                                <label htmlFor="demo-email">Email Address <span className="demo-modal__required">*</span></label>
+                                <input
+                                    type="email"
+                                    id="demo-email"
+                                    placeholder="Enter your email address"
+                                    value={formData.email}
+                                    onChange={e => handleChange('email', e.target.value)}
+                                    autoComplete="email"
+                                />
+                                {errors.email && <span className="demo-modal__error">{errors.email}</span>}
+                            </div>
+
+                            <div className={`demo-modal__field ${errors.mobile ? 'demo-modal__field--error' : ''}`}>
+                                <label htmlFor="demo-mobile">Mobile Number <span className="demo-modal__required">*</span></label>
+                                <input
+                                    type="tel"
+                                    id="demo-mobile"
+                                    placeholder="Enter your 10-digit mobile number"
+                                    value={formData.mobile}
+                                    onChange={e => handleChange('mobile', e.target.value)}
+                                    inputMode="numeric"
+                                    maxLength={10}
+                                    autoComplete="tel"
+                                />
+                                {errors.mobile && <span className="demo-modal__error">{errors.mobile}</span>}
+                            </div>
+
+                            <div className={`demo-modal__field ${errors.organization ? 'demo-modal__field--error' : ''}`}>
+                                <label htmlFor="demo-organization">Organization Name <span className="demo-modal__required">*</span></label>
+                                <input
+                                    type="text"
+                                    id="demo-organization"
+                                    placeholder="Enter your organization name"
+                                    value={formData.organization}
+                                    onChange={e => handleChange('organization', e.target.value)}
+                                    autoComplete="organization"
+                                />
+                                {errors.organization && <span className="demo-modal__error">{errors.organization}</span>}
+                            </div>
+
+                            <div className="demo-modal__field">
+                                <label htmlFor="demo-comments">Comments / Message <span className="demo-modal__optional">(Optional)</span></label>
+                                <textarea
+                                    id="demo-comments"
+                                    placeholder="Tell us about your requirements..."
+                                    rows={3}
+                                    value={formData.comments}
+                                    onChange={e => handleChange('comments', e.target.value)}
+                                />
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="btn btn-primary demo-modal__submit"
+                                disabled={isSubmitting}
+                                id="demo-submit-btn"
+                            >
+                                {isSubmitting ? (
+                                    <span className="demo-modal__spinner" />
+                                ) : (
+                                    <>Schedule Demo <ArrowRight size={18} /></>
+                                )}
+                            </button>
+
+                            <div className="demo-modal__privacy">
+                                <Lock size={14} />
+                                <span>We respect your privacy. Your information will not be shared.</span>
+                            </div>
+                        </form>
+                    </>
+                )}
+            </div>
+        </div>
+    );
+}
+
 /* ===== HERO SECTION ===== */
-function HeroSection() {
+function HeroSection({ onOpenDemo }: { onOpenDemo: () => void }) {
     return (
         <section className="hero" id="hero-section">
-            {/* Animated background elements */}
-            <div className="hero__bg">
-                <div className="hero__bg-orb hero__bg-orb--1" />
-                <div className="hero__bg-orb hero__bg-orb--2" />
-                <div className="hero__bg-orb hero__bg-orb--3" />
-                <div className="hero__bg-grid" />
-            </div>
-
             <div className="container hero__container">
                 <div className="hero__content">
                     <div className="hero__badge">
-                        <Star size={14} />
-                        <span>Empower Your Sales Growth Today</span>
+                        <ShieldCheck size={14} />
+                        <span>Empowering Pharma & Cosmetics Brands to Sell Smarter</span>
                     </div>
                     <h1 className="hero__title">
                         One-stop Partner for
@@ -33,236 +214,112 @@ function HeroSection() {
                     <p className="hero__subtitle">
                         Discover how our integrated Pharma & Cosmetics e-commerce solutions operate in harmony to accelerate sustainable online growth. Backed by structured documentation, compliance-focused processes, and experienced marketplace management, Sri Vedha Agencies ensures reliable distribution and long-term brand protection.
                     </p>
+
+                    {/* Reviews & CTA */}
+                    <div className="hero__reviews">
+                        <div className="hero__stars">
+                            <Star size={18} fill="#fbbf24" color="#fbbf24" />
+                            <Star size={18} fill="#fbbf24" color="#fbbf24" />
+                            <Star size={18} fill="#fbbf24" color="#fbbf24" />
+                            <Star size={18} fill="#fbbf24" color="#fbbf24" />
+                            <Star size={18} fill="#fbbf24" color="#fbbf24" />
+                        </div>
+                        <span className="hero__reviews-text">Trusted by 100+ Reviews</span>
+                    </div>
+
                     <div className="hero__buttons">
-                        <Link to="/categories" className="btn btn-primary hero__btn" id="hero-explore-btn">
-                            Explore Products <ArrowRight size={18} />
-                        </Link>
-                    </div>
-
-                </div>
-
-                <div className="hero__visual">
-                    <div className="hero__card hero__card--main">
-                        <div className="hero__card-header">
-                            <div className="hero__card-dot" />
-                            <div className="hero__card-dot" />
-                            <div className="hero__card-dot" />
-                        </div>
-                        <div className="hero__card-content">
-                            <div className="hero__card-row">
-                                <div className="hero__card-icon"><Package size={20} /></div>
-                                <div>
-                                    <div className="hero__card-title">Bulk Order #1247</div>
-                                    <div className="hero__card-sub">FMCG Products • 250 units</div>
-                                </div>
-                                <span className="hero__card-badge hero__card-badge--success">Shipped</span>
-                            </div>
-                            <div className="hero__card-row">
-                                <div className="hero__card-icon"><Package size={20} /></div>
-                                <div>
-                                    <div className="hero__card-title">Order #1246</div>
-                                    <div className="hero__card-sub">Personal Care • 180 units</div>
-                                </div>
-                                <span className="hero__card-badge hero__card-badge--pending">Processing</span>
-                            </div>
-                            <div className="hero__card-row">
-                                <div className="hero__card-icon"><Package size={20} /></div>
-                                <div>
-                                    <div className="hero__card-title">Order #1245</div>
-                                    <div className="hero__card-sub">Household • 320 units</div>
-                                </div>
-                                <span className="hero__card-badge hero__card-badge--success">Delivered</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="hero__floating-card hero__floating-card--1">
-                        <Truck size={20} />
-                        <div>
-                            <strong>Fast Delivery</strong>
-                            <span>24-48 hours</span>
-                        </div>
-                    </div>
-
-                    <div className="hero__floating-card hero__floating-card--2">
-                        <Shield size={20} />
-                        <div>
-                            <strong>Secure Payments</strong>
-                            <span>100% Protected</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-}
-
-/* ===== ABOUT SECTION ===== */
-function AboutSection() {
-    const { ref, isVisible } = useScrollAnimation();
-
-    return (
-        <section className="about" id="about-section" ref={ref}>
-            <div className={`container about__container ${isVisible ? 'visible' : ''}`}>
-                <div className="about__content">
-                    <span className="section-label">About Us</span>
-                    <h2 className="section-title">About Srivedha Agencies</h2>
-                    <p className="about__text">
-                        Srivedha Agencies is a trusted wholesale distributor dedicated to serving retailers, dealers,
-                        and bulk buyers with quality products across multiple categories. We focus on affordability,
-                        reliability, and fast delivery.
-                    </p>
-                    <p className="about__text">
-                        With years of experience in the wholesale distribution industry, we've built lasting
-                        relationships with both manufacturers and retailers, ensuring a seamless supply chain
-                        that delivers value at every step.
-                    </p>
-                    <div className="about__highlights">
-                        <div className="about__highlight">
-                            <Users size={20} />
-                            <span>500+ Retail Partners</span>
-                        </div>
-                        <div className="about__highlight">
-                            <Globe size={20} />
-                            <span>Pan-India Distribution</span>
-                        </div>
-                        <div className="about__highlight">
-                            <Award size={20} />
-                            <span>10+ Years Experience</span>
-                        </div>
-                    </div>
-                    <Link to="/about" className="btn btn-outline" id="about-learn-more">
-                        Learn More <ArrowRight size={16} />
-                    </Link>
-                </div>
-                <div className="about__visual">
-                    <div className="about__card-stack">
-                        <div className="about__metric-card about__metric-card--1">
-                            <div className="about__metric-number">10K+</div>
-                            <div className="about__metric-label">Products Available</div>
-                        </div>
-                        <div className="about__metric-card about__metric-card--2">
-                            <div className="about__metric-number">₹50Cr+</div>
-                            <div className="about__metric-label">Annual Distribution</div>
-                        </div>
-                        <div className="about__metric-card about__metric-card--3">
-                            <div className="about__metric-number">99.5%</div>
-                            <div className="about__metric-label">Order Fulfillment</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-}
-
-/* ===== CATEGORIES SECTION ===== */
-const categories = [
-    { icon: '🛒', title: 'FMCG Products', desc: 'Fast-moving consumer goods from top brands', count: '2,500+ Items', slug: 'fmcg' },
-    { icon: '🧴', title: 'Personal Care', desc: 'Skincare, haircare, and hygiene essentials', count: '1,800+ Items', slug: 'personal-care' },
-    { icon: '🏠', title: 'Household Items', desc: 'Cleaning supplies and home essentials', count: '1,200+ Items', slug: 'household' },
-    { icon: '🥫', title: 'Groceries', desc: 'Staples, spices, and packaged foods', count: '3,000+ Items', slug: 'groceries' },
-    { icon: '🧃', title: 'Beverages', desc: 'Juices, soft drinks, and health drinks', count: '800+ Items', slug: 'beverages' },
-    { icon: '📦', title: 'Bulk Essentials', desc: 'Daily essentials at wholesale prices', count: '1,500+ Items', slug: 'bulk-essentials' },
-];
-
-function CategoriesSection() {
-    const { ref, isVisible } = useScrollAnimation();
-
-    return (
-        <section className="categories" id="categories-section" ref={ref}>
-            <div className={`container ${isVisible ? 'visible' : ''}`}>
-                <div className="categories__header">
-                    <div>
-                        <span className="section-label">Our Products</span>
-                        <h2 className="section-title">Product Categories</h2>
-                        <p className="section-subtitle">
-                            Browse through our extensive range of wholesale products curated for retailers.
-                        </p>
-                    </div>
-                    <Link to="/categories" className="btn btn-outline categories__view-all" id="categories-view-all">
-                        View All Categories <ArrowRight size={16} />
-                    </Link>
-                </div>
-
-                <div className="categories__grid">
-                    {categories.map((cat, i) => (
-                        <Link
-                            to={`/categories/${cat.slug}`}
-                            key={cat.slug}
-                            className={`categories__card stagger-${i + 1} ${isVisible ? 'visible' : ''}`}
-                            id={`category-card-${cat.slug}`}
+                        <button
+                            className="btn btn-primary hero__btn hero__join-btn"
+                            onClick={onOpenDemo}
+                            id="hero-join-btn"
                         >
-                            <div className="categories__card-icon">{cat.icon}</div>
-                            <h3 className="categories__card-title">{cat.title}</h3>
-                            <p className="categories__card-desc">{cat.desc}</p>
-                            <div className="categories__card-footer">
-                                <span className="categories__card-count">{cat.count}</span>
-                                <ChevronRight size={16} />
-                            </div>
+                            Join Us <ArrowRight size={18} />
+                        </button>
+                        <Link to="/services" className="btn btn-outline hero__btn hero__explore-btn" id="hero-explore-btn">
+                            Our Services <ChevronRight size={18} />
                         </Link>
-                    ))}
+                    </div>
+                </div>
+
+                <div className="hero__image-wrapper">
+                    <img
+                        src="/hero-marketplace.png"
+                        alt="Brand-controlled marketplace platform with verified sellers and trust verification"
+                        className="hero__image"
+                    />
+                    <div className="hero__image-glow" />
                 </div>
             </div>
         </section>
     );
 }
 
-/* ===== WHY CHOOSE US SECTION ===== */
-const features = [
+/* ===== WHY US SECTION ===== */
+const whyUsFeatures = [
     {
-        icon: <ShoppingCart size={28} />,
-        title: 'Competitive Wholesale Pricing',
-        desc: 'Get the best bulk prices directly from manufacturers. Our pricing ensures maximum margins for your retail business.',
+        icon: <ShieldCheck size={28} />,
+        title: 'Authorized Seller Control',
+        desc: 'Only brand-authorized sellers can list products. Unauthorized resellers are identified and removed instantly.',
         color: '#3b82f6'
     },
     {
-        icon: <Truck size={28} />,
-        title: 'Fast & Reliable Delivery',
-        desc: 'Enjoy swift delivery across all pin codes with real-time tracking. Most orders delivered within 24-48 hours.',
+        icon: <Shield size={28} />,
+        title: 'Brand Protection',
+        desc: 'We safeguard your brand identity, ensuring no counterfeit or unauthorized products reach customers.',
         color: '#10b981'
     },
     {
         icon: <BarChart3 size={28} />,
-        title: 'Easy Bulk Ordering',
-        desc: 'Our intuitive platform makes placing bulk orders effortless. Smart inventory management and reorder alerts included.',
+        title: 'Controlled Pricing',
+        desc: 'Maintain consistent pricing across all sellers. No price wars, no undercutting — just fair, controlled pricing.',
         color: '#8b5cf6'
     },
     {
-        icon: <Shield size={28} />,
-        title: 'Secure Transactions',
-        desc: 'Bank-grade security for all transactions. Multiple payment options with dedicated support for every order.',
+        icon: <Truck size={28} />,
+        title: 'Strong Distribution Network',
+        desc: 'Leverage our nationwide logistics infrastructure for seamless, reliable, and fast distribution.',
         color: '#f59e0b'
+    },
+    {
+        icon: <Eye size={28} />,
+        title: 'Transparent Ecosystem',
+        desc: 'Full visibility into seller activities, pricing compliance, and distribution performance with real-time dashboards.',
+        color: '#ef4444'
+    },
+    {
+        icon: <CheckCircle size={28} />,
+        title: 'Trust & Compliance',
+        desc: 'Every seller is verified and compliant. Build customer trust through genuine products and authorized channels.',
+        color: '#06b6d4'
     },
 ];
 
-function WhyChooseSection() {
+function WhyUsSection() {
     const { ref, isVisible } = useScrollAnimation();
 
     return (
-        <section className="why-choose" id="why-choose-section" ref={ref}>
+        <section className="why-us" id="why-us-section" ref={ref}>
             <div className={`container ${isVisible ? 'visible' : ''}`}>
-                <div className="why-choose__header">
+                <div className="why-us__header">
                     <span className="section-label">Why Choose Us</span>
-                    <h2 className="section-title">Built for Retailers,<br />Designed for Growth</h2>
+                    <h2 className="section-title">Why Sri Vedha Agencies?</h2>
                     <p className="section-subtitle">
-                        We provide everything you need to streamline your wholesale purchasing and grow your retail business.
-                    </p>
+                        Unlock the full potential of your Pharma & Cosmetics e-commerce business with Sri Vedha Agencies.                    </p>
                 </div>
 
-                <div className="why-choose__grid">
-                    {features.map((feature, i) => (
+                <div className="why-us__grid">
+                    {whyUsFeatures.map((feature, i) => (
                         <div
                             key={feature.title}
-                            className={`why-choose__card stagger-${i + 1} ${isVisible ? 'visible' : ''}`}
-                            id={`feature-card-${i}`}
+                            className={`why-us__card stagger-${i + 1} ${isVisible ? 'visible' : ''}`}
+                            id={`why-us-card-${i}`}
                         >
-                            <div className="why-choose__card-icon" style={{ background: `${feature.color}15`, color: feature.color }}>
+                            <div className="why-us__card-icon" style={{ background: `${feature.color}12`, color: feature.color }}>
                                 {feature.icon}
                             </div>
-                            <h3 className="why-choose__card-title">{feature.title}</h3>
-                            <p className="why-choose__card-desc">{feature.desc}</p>
-                            <div className="why-choose__card-line" style={{ background: feature.color }} />
+                            <h3 className="why-us__card-title">{feature.title}</h3>
+                            <p className="why-us__card-desc">{feature.desc}</p>
+                            <div className="why-us__card-line" style={{ background: feature.color }} />
                         </div>
                     ))}
                 </div>
@@ -271,40 +328,161 @@ function WhyChooseSection() {
     );
 }
 
-/* ===== HOW IT WORKS SECTION ===== */
-const steps = [
-    { icon: <UserPlus size={28} />, title: 'Register as Retailer', desc: 'Create your free account in minutes. Verify your business and get approved instantly.' },
-    { icon: <Search size={28} />, title: 'Browse Categories', desc: 'Explore our vast catalog of 10,000+ products across multiple wholesale categories.' },
-    { icon: <Package size={28} />, title: 'Place Bulk Order', desc: 'Select products, choose quantities, and place your order with competitive bulk pricing.' },
-    { icon: <Clock size={28} />, title: 'Fast Delivery to Your Store', desc: 'Sit back while we handle logistics. Your order arrives within 24-48 hours.' },
-];
-
-function HowItWorksSection() {
+/* ===== PRODUCT CATEGORY (Personal Care Only) ===== */
+function CategorySection() {
     const { ref, isVisible } = useScrollAnimation();
 
     return (
-        <section className="how-it-works" id="how-it-works-section" ref={ref}>
+        <section className="category-focus" id="category-section" ref={ref}>
+            <div className={`container category-focus__container ${isVisible ? 'visible' : ''}`}>
+                <div className="category-focus__content">
+                    <span className="section-label">Our Focus</span>
+                    <h2 className="section-title">Personal Care</h2>
+                    <p className="category-focus__desc">
+                        We specialize in authorized distribution of premium personal care brands across online marketplaces.
+                        Our controlled ecosystem ensures brand integrity, consistent pricing, and genuine product delivery.
+                    </p>
+                    <div className="category-focus__highlights">
+                        <div className="category-focus__highlight">
+                            <ShieldCheck size={18} />
+                            <span>Authorized Distribution</span>
+                        </div>
+                        <div className="category-focus__highlight">
+                            <BarChart3 size={18} />
+                            <span>Controlled Pricing</span>
+                        </div>
+                        <div className="category-focus__highlight">
+                            <CheckCircle size={18} />
+                            <span>Genuine Products Only</span>
+                        </div>
+                    </div>
+                </div>
+                <div className="category-focus__visual">
+                    <div className="category-focus__icon-wrapper">
+                        🧴
+                    </div>
+                    <div className="category-focus__stats-row">
+                        <div className="category-focus__stat">
+                            <strong>1,800+</strong>
+                            <span>Products</span>
+                        </div>
+                        <div className="category-focus__stat-divider" />
+                        <div className="category-focus__stat">
+                            <strong>50+</strong>
+                            <span>Brands</span>
+                        </div>
+                        <div className="category-focus__stat-divider" />
+                        <div className="category-focus__stat">
+                            <strong>100%</strong>
+                            <span>Authorized</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+
+/* ===== KEY STATISTICS SECTION ===== */
+function KeyStatsSection() {
+    const { ref, isVisible } = useScrollAnimation();
+
+    return (
+        <section className="key-stats" id="key-stats-section" ref={ref}>
             <div className={`container ${isVisible ? 'visible' : ''}`}>
-                <div className="how-it-works__header">
-                    <span className="section-label">How It Works</span>
-                    <h2 className="section-title">Get Started in 4 Simple Steps</h2>
+                <div className="key-stats__header">
+                    <span className="section-label">Our Impact</span>
+                    <h2 className="section-title">Driving Growth at Scale</h2>
                     <p className="section-subtitle">
-                        From registration to delivery, our streamlined process makes wholesale buying effortless.
+                        Our numbers speak for themselves — a testament to the trust brands place in our platform.
                     </p>
                 </div>
+                <div className="key-stats__grid">
+                    <div className={`key-stats__card stagger-1 ${isVisible ? 'visible' : ''}`} id="stat-shipments">
+                        <div className="key-stats__card-image">
+                            <img src="/stat-shipments.png" alt="Shipments" />
+                        </div>
+                        <div className="key-stats__card-number">2.5 Cr+</div>
+                        <div className="key-stats__card-label">Shipments</div>
+                    </div>
+                    <div className={`key-stats__card stagger-2 ${isVisible ? 'visible' : ''}`} id="stat-warehouses">
+                        <div className="key-stats__card-image">
+                            <img src="/stat-warehouses.png" alt="Warehouses" />
+                        </div>
+                        <div className="key-stats__card-number">8</div>
+                        <div className="key-stats__card-label">Warehouses</div>
+                    </div>
+                    <div className={`key-stats__card stagger-3 ${isVisible ? 'visible' : ''}`} id="stat-brands">
+                        <div className="key-stats__card-image">
+                            <img src="/stat-brands.png" alt="Brand Associations" />
+                        </div>
+                        <div className="key-stats__card-number">500+</div>
+                        <div className="key-stats__card-label">Brand Associations</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
 
-                <div className="how-it-works__steps">
-                    {steps.map((step, i) => (
+/* ===== OUR REACH SECTION ===== */
+const marketplacePlatforms = [
+    { name: 'Amazon', logo: '/platforms/amazon.png', color: '#FF9900' },
+    { name: 'Flipkart', logo: '/platforms/flipkart.jpeg', color: '#2874F0' },
+    { name: 'JioMart', logo: '/platforms/jio.png', color: '#0078AD' },
+    { name: 'Meesho', logo: '/platforms/meesho.png', color: '#E83E8C' },
+    { name: 'Myntra', logo: '/platforms/myntra.jpeg ', color: '#FF3F6C' },
+    { name: 'Nykaa', logo: '/platforms/nykaa.png', color: '#FC2779' },
+    { name: 'Tata 1mg', logo: '/platforms/tata.png', color: '#FF6F61' },
+    { name: 'Ajio', logo: '/platforms/ajio.png', color: '#3F3B80' },
+    { name: 'Snapdeal', logo: '/platforms/snap.png', color: '#E40046' },
+    { name: 'BigBasket', logo: '/platforms/bigBasket.png', color: '#84C225' },
+];
+
+const reachHighlights = [
+    { icon: <MapPin size={22} />, title: 'Pan-India Presence', desc: 'Active across all major Indian states and metros' },
+    { icon: <Building2 size={22} />, title: '8 Warehouses', desc: 'Strategically positioned fulfillment centers' },
+    { icon: <Truck size={22} />, title: '24-48hr Delivery', desc: 'Fast, reliable nationwide logistics network' },
+    { icon: <Handshake size={22} />, title: '500+ Brands', desc: 'Trusted brand partnerships across categories' },
+    { icon: <TrendingUp size={22} />, title: 'End-to-End Supply Chain', desc: 'Procurement to last-mile delivery' },
+    { icon: <Zap size={22} />, title: 'AI-Powered Tools', desc: 'Pricing control & seller monitoring' },
+];
+
+function OurReachSection() {
+    const { ref, isVisible } = useScrollAnimation();
+
+    return (
+        <section className="our-reach" id="our-reach-section" ref={ref}>
+            <div className={`container ${isVisible ? 'visible' : ''}`}>
+                <div className="our-reach__header">
+                    <span className="section-label">Our Reach</span>
+                    <h2 className="section-title">We facilitate selling on numerous<br />platforms for maximum market exposure</h2>
+                    <p className="section-subtitle">
+                        We enable Pharma & Cosmetics brands to sell across leading e-commerce platforms, ensuring maximum market visibility and structured distribution support.                    </p>
+                </div>
+
+                {/* Marketplace Platforms Grid */}
+                <div className="our-reach__platforms">
+                    {marketplacePlatforms.map((platform, i) => (
                         <div
-                            key={step.title}
-                            className={`how-it-works__step stagger-${i + 1} ${isVisible ? 'visible' : ''}`}
-                            id={`step-${i + 1}`}
+                            key={platform.name}
+                            className={`our-reach__platform-card stagger-${(i % 6) + 1} ${isVisible ? 'visible' : ''}`}
                         >
-                            <div className="how-it-works__step-number">{String(i + 1).padStart(2, '0')}</div>
-                            <div className="how-it-works__step-icon">{step.icon}</div>
-                            <h3 className="how-it-works__step-title">{step.title}</h3>
-                            <p className="how-it-works__step-desc">{step.desc}</p>
-                            {i < steps.length - 1 && <div className="how-it-works__connector" />}
+                            <img src={platform.logo} alt={`${platform.name} logo`} className="our-reach__platform-logo" style={{ height: '75px' }} />
+                            <span className="our-reach__platform-name">{platform.name}</span>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Reach Highlights */}
+                <div className="our-reach__highlights">
+                    {reachHighlights.map((item, i) => (
+                        <div key={item.title} className={`our-reach__highlight-card stagger-${(i % 6) + 1} ${isVisible ? 'visible' : ''}`}>
+                            <div className="our-reach__highlight-icon">{item.icon}</div>
+                            <div>
+                                <h4 className="our-reach__highlight-title">{item.title}</h4>
+                                <p className="our-reach__highlight-desc">{item.desc}</p>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -346,7 +524,7 @@ function TrustedPartnersSection() {
 }
 
 /* ===== CTA SECTION ===== */
-function CTASection() {
+function CTASection({ onOpenDemo }: { onOpenDemo: () => void }) {
     const { ref, isVisible } = useScrollAnimation();
 
     return (
@@ -358,16 +536,16 @@ function CTASection() {
                 </div>
                 <div className="cta-section__content">
                     <h2 className="cta-section__title">
-                        Ready to grow your retail<br />business with us?
+                        Ready to protect your brand<br />on online marketplaces?
                     </h2>
                     <p className="cta-section__desc">
-                        Join 500+ retailers who trust Srivedha Agencies for their wholesale needs.
-                        Register now and get exclusive first-order discounts.
+                        Join 500+ brands who trust Sri Vedha Agencies for authorized marketplace distribution,
+                        pricing control, and brand protection.
                     </p>
                     <div className="cta-section__buttons">
-                        <Link to="/login" className="btn btn-primary" id="cta-register">
-                            Register Now <ArrowRight size={18} />
-                        </Link>
+                        <button className="btn btn-primary" onClick={onOpenDemo} id="cta-register">
+                            Join Us <ArrowRight size={18} />
+                        </button>
                         <Link to="/contact" className="btn btn-secondary" id="cta-contact">
                             Contact Sales Team
                         </Link>
@@ -380,15 +558,18 @@ function CTASection() {
 
 /* ===== HOME PAGE ===== */
 export default function Home() {
+    const [isDemoOpen, setIsDemoOpen] = useState(false);
+
     return (
         <main id="home-page">
-            <HeroSection />
-            <AboutSection />
-            <CategoriesSection />
-            <WhyChooseSection />
-            <HowItWorksSection />
+            <HeroSection onOpenDemo={() => setIsDemoOpen(true)} />
+            <WhyUsSection />
+            <CategorySection />
+            <KeyStatsSection />
+            <OurReachSection />
             <TrustedPartnersSection />
-            <CTASection />
+            <CTASection onOpenDemo={() => setIsDemoOpen(true)} />
+            <DemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
         </main>
     );
 }
